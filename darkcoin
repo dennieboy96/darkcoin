@@ -1,6 +1,5 @@
 #!/bin/bash
-#sectie menu om te kiezen tussen het verwijderen of toevoegen van een omgeving.
-PS3='Welkom terug, wat wilt u vandaag doen?: '
+PS3='Welcome back, what would you like to do?: '
 options=("Nieuwse server aanmaken" "Nieuwe Masternode Uitrollen" "Masternodes starten" "Masternodes updaten" "Turn SWAP on" "Turn SWAP off")
 select opt in "${options[@]}"
 do
@@ -8,7 +7,6 @@ do
 #variablen. 
 V61=2
 GATE=1
-
 	case $opt in
 		"Nieuwse server aanmaken")
 			echo "Put in IPv6 address without the last digit. Like this: 2a01:7c8:d000:3cc::"
@@ -55,8 +53,10 @@ exit
 				read MASTERNODE
 			echo "Genkey of masternode"
 				read PRIVATEKEY
-				
-				IP_ADDR='cat /root/.IPV6'
+				IP_ADDR="$( bash <<EOF
+				sudo cat /root/.IPV6
+EOF
+)"
 				CONFIG_FILE='darkpaycoin.conf'
 				CONFIGFOLDER=/root/.darkpaycoin$MASTERNODE
 				COIN_NAME=darkpaycoin$MASTERNODE

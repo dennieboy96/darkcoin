@@ -4,9 +4,11 @@ PS3='Welkom terug, wat wilt u vandaag doen?: '
 options=("Nieuwse server aanmaken" "Nieuwe Masternode Uitrollen" "Masternodes starten" "Masternodes updaten" "Turn SWAP on" "Turn SWAP off")
 select opt in "${options[@]}"
 do
+
+#variablen. 
 V61=2
 GATE=1
-#het bekijken welke omgeving er weggegooit moet worden.
+
 	case $opt in
 		"Nieuwse server aanmaken")
 			echo "Put in IPv6 address without the last digit. Like this: 2a01:7c8:d000:3cc::"
@@ -38,7 +40,13 @@ GATE=1
 			rm -rf /root/blocks /root/chainstate 
 			rm /root/dpc_fastsync.zip
 			rm /dpc_mn_install.sh
+			Echo "Install script so you can run it like: darkcoin"
+			cd /usr/local/bin
+			wget https://github.com/dennieboy96/darkcoin/raw/master/darkcoin
+			chmod +x darkcoin
+			chmod 755 darkcoin
 	break
+
 exit
 ;;
 

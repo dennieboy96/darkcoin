@@ -45,37 +45,79 @@ GATE=1
 			wget https://github.com/dennieboy96/darkcoin/raw/master/darkcoin
 			chmod +x darkcoin
 			chmod 755 darkcoin
+			echo "$IPVNET" > /root/.IPV6
 	break
 
 exit
 ;;
-
 		"Nieuwe Masternode Uitrollen")
-			echo "nmmr"
+			echo "Masternode number"
 				read MASTERNODE
-			echo "Wat is het IPv6 adres van de masternode?"
-				read IPADDRESS
-			echo "Voer hier de genkey in van de masternode"
+			echo "Genkey of masternode"
 				read PRIVATEKEY
+				
+				IP_ADDR='cat /root/.IPV6'
+				CONFIG_FILE='darkpaycoin.conf'
+				CONFIGFOLDER=/root/.darkpaycoin$MASTERNODE
+				COIN_NAME=darkpaycoin$MASTERNODE
+				COIN_DAEMON=darkpaycoind$MASTERNODE
+				COIN_PATH='/usr/local/bin/'
+				COIN_CLI='darkpaycoin-cli'
 
-			cp /root/darkpaycoind /root/darkpaycoind$MASTERNODE
-			cp -R /root/.darkpaycoin-template/ /root/.darkpaycoin$MASTERNODE
-			chmod 775 /root/.darkpaycoin$MASTERNODE
-			echo "bind=[$IPADDRESS]" >> /root/.darkpaycoin$MASTERNODE/darkpaycoin.conf
-			echo "rpcport=100$MASTERNODE" >> /root/.darkpaycoin$MASTERNODE/darkpaycoin.conf
-			echo "masternodeaddr=[$IPADDRESS:6667]" >> /root/.darkpaycoin$MASTERNODE/darkpaycoin.conf
-			echo "masternodeprivkey=$PRIVATEKEY" >> /root/.darkpaycoin$MASTERNODE/darkpaycoin.conf
-			rm -rf /root/.darkpaycoin$MASTERNODE/blocks
-			rm -rf /root/.darkpaycoin$MASTERNODE/chainstate
-			cp -R /root/.darkpaycoin/blocks/ /root/.darkpaycoin$MASTERNODE/blocks
-			cp -R /root/.darkpaycoin/chainstate/ /root/.darkpaycoin$MASTERNODE/chainstate
-			cp -R /root/.darkpaycoin/peers.dat /root/.darkpaycoin$MASTERNODE/peers.dat
-			/root/./darkpaycoind$MASTERNODE --datadir=/root/.darkpaycoin$MASTERNODE/
-			sleep 5
-			tail -f /root/.darkpaycoin$MASTERNODE/debug.log
+				cp /root/darkpaycoind $COIN_PATH$COIN_DAEMON
+				cp -R /root/.darkpaycoin-template/ /root/.darkpaycoin$MASTERNODE
+				cp -R /root/.darkpaycoin/chainstate/ /root/.darkpaycoin$MASTERNODE/
+				cp -R /root/.darkpaycoin/blocks/ /root/.darkpaycoin$MASTERNODE/
+				cp  /root/.darkpaycoin/peers.dat /root/.darkpaycoin$MASTERNODE/
+				chmod 775 /root/.darkpaycoin$MASTERNODE
+				echo "bind=[$IP_ADDR$MASTERNODE]" >> /root/.darkpaycoin$MASTERNODE/darkpaycoin.conf
+				echo "rpcport=100$MASTERNODE" >> /root/.darkpaycoin$MASTERNODE/darkpaycoin.conf
+				echo "masternodeaddr=[$IP_ADDR$MASTERNODE:6667]" >> /root/.darkpaycoin$MASTERNODE/darkpaycoin.conf
+				echo "masternodeprivkey=$PRIVATEKEY" >> /root/.darkpaycoin$MASTERNODE/darkpaycoin.conf
+
+
+				function configure_systemd() {
+				  cat << EOF > /etc/systemd/system/$COIN_NAME.service
+				[Unit]
+				Description=$COIN_NAME service
+				After=network.target
+				[Service]
+				User=root
+				Group=root
+				Type=forking
+				#PIDFile=$CONFIGFOLDER/$COIN_NAME.pid
+				ExecStart=$COIN_PATH$COIN_DAEMON -daemon -conf=$CONFIGFOLDER/$CONFIG_FILE -datadir=$CONFIGFOLDER
+				ExecStop=-$COIN_PATH$COIN_CLI -conf=$CONFIGFOLDER/$CONFIG_FILE -datadir=$CONFIGFOLDER stop
+				Restart=always
+				PrivateTmp=true
+				TimeoutStopSec=60s
+				TimeoutStartSec=10s
+				StartLimitInterval=120s
+				StartLimitBurst=5
+				[Install]
+				WantedBy=multi-user.target
+EOF
+
+				  systemctl daemon-reload
+				  sleep 3
+				  systemctl start $COIN_NAME.service
+				  systemctl enable $COIN_NAME.service >/dev/null 2>&1
+
+				  if [[ -z "$(ps axo cmd:100 | egrep $COIN_DAEMON)" ]]; then
+					echo -e "${RED}$COIN_NAME is not running${NC}, please investigate. You should start by running the following commands as root:"
+					echo -e "${GREEN}systemctl start $COIN_NAME.service"
+					echo -e "systemctl status $COIN_NAME.service"
+					echo -e "less /var/log/syslog${NC}"
+					exit 1
+				  fi
+				}
+
+				configure_systemd
+				sleep 10
 	break
 exit
 ;;
+
 		"Masternodes starten")
 			echo "Masternode nummer van"
 				read NMBR1

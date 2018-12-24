@@ -1,6 +1,6 @@
 #!/bin/bash
 PS3='Welcome back, what would you like to do?: '
-options=("Nieuwse server aanmaken" "Nieuwe Masternode Uitrollen" "Masternodes starten" "Masternodes updaten" "Turn SWAP on" "Turn SWAP off")
+options=("Nieuwse server aanmaken" "Nieuwe Masternode Uitrollen" "Masternodes starten" "Masternodes updaten" "Turn SWAP on" "Turn SWAP off" "Statuscheck masternode" )
 select opt in "${options[@]}"
 do
 
@@ -126,7 +126,7 @@ exit
 			 for (( i = $NMBR1; i <= $NMBR2; i++ ))			
 			do
 				echo "Starting node nr: $i"
-				/root/darkpaycoind$i --datadir=/root/.darkpaycoin$i/
+				systemctl start darkpaycoin$i.service
 			done
 	break
 exit
@@ -163,7 +163,7 @@ exit
 			   cp -R /root/update/blocks/ /root/.darkpaycoin$i/blocks/
 			   cp -R /root/update/chainstate/ /root/.darkpaycoin$i/chainstate/
 			   cp /root/update/peers.dat /root/.darkpaycoin$i/peers.dat
-			   /root/darkpaycoind$i --datadir=/root/.darkpaycoin$i/
+			   systemctl start darkpaycoin$i.service
 			   echo "Done updating masternode nr: $i, wait 60sec to start-up"
 			   sleep 60
 			done
@@ -198,12 +198,28 @@ esac
 			exit
 			;;
 			esac
-
-
+        break
+exit
+;;
+		"Statuscheck masternode")
+			echo "Masternode nummer van"
+				read NMBRSTAT1
+			echo "tot"
+				read NMBRSTAT2
+			echo "node darkpaycoin nr0"
+			darkpaycoin-cli -datadir=/root/.darkpaycoin masternode status
+			systemctl status darkpaycoin$i.service | grep Active
+			echo " "
+			for (( i = $NMBRSTAT1; i <= $NMBRSTAT2; i++ ))
+			do
+				echo "node darkpaycoin nr$i"
+				darkpaycoin-cli -datadir=/root/.darkpaycoin$i masternode status
+				systemctl status darkpaycoin$i.service | grep Active		
+			echo " "
+			done
 	break
 exit
 ;;
-
 esac
 done
 

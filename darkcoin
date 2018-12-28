@@ -148,7 +148,7 @@ esac
 	"")
 
 PS3='Welcome back, what would you like to do?: '
-options=("Nieuwse server aanmaken" "Nieuwe Masternode Uitrollen" "Reinstall masternode" "Masternodes starten" "Masternodes updaten" "Turn SWAP on" "Turn SWAP off" "Statuscheck masternode" )
+options=("Nieuwse server aanmaken" "Nieuwe Masternode Uitrollen" "Reinstall masternode" "Delete masternode" "Masternodes starten" "Masternodes updaten" "Turn SWAP on" "Turn SWAP off" "Statuscheck masternode" )
 select opt in "${options[@]}"
 do
 

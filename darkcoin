@@ -1,4 +1,9 @@
 #!/bin/bash
+CODE=$1
+MNNMMR=$2
+GENKEY=$3
+
+echo "$CODE $MNNMMR $GENKEY"
 PS3='Welcome back, what would you like to do?: '
 options=("Nieuwse server aanmaken" "Nieuwe Masternode Uitrollen" "Masternodes starten" "Masternodes updaten" "Turn SWAP on" "Turn SWAP off" "Statuscheck masternode" )
 select opt in "${options[@]}"
@@ -222,4 +227,3 @@ exit
 ;;
 esac
 done
-

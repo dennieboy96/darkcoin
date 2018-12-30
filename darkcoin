@@ -183,13 +183,15 @@ GATE=1
 			sed -i "s/daemon=0/daemon=1/g" /root/.darkpaycoin-template/darkpaycoin.conf
 			rm -rf /root/blocks /root/chainstate 
 			rm /root/dpc_fastsync.zip
-			rm /dpc_mn_install.sh
+			rm /root/dpc_mn_install.sh
 			Echo "Install script so you can run it like: darkcoin"
 			cd /usr/local/bin
-			wget https://github.com/dennieboy96/darkcoin/raw/master/darkcoin
+			echo "$IPVNET" > /root/.IPV6
+			Echo "Install script so you can run it like: darkcoin"
+			cd /usr/local/bin
+    			wget https://github.com/dennieboy96/darkcoin/raw/master/darkcoin
 			chmod +x darkcoin
 			chmod 755 darkcoin
-			echo "$IPVNET" > /root/.IPV6
 	break
 
 exit

@@ -68,8 +68,6 @@ EOF
 				COIN_DAEMON=darkpaycoind$MASTERNODE
 				COIN_PATH='/usr/local/bin/'
 				COIN_CLI='darkpaycoin-cli'
-				
-				read -p "Press enter to continue"
 				cp /root/darkpaycoind $COIN_PATH$COIN_DAEMON
 				cp -R /root/.darkpaycoin-template/ /root/.darkpaycoin$MASTERNODE
 				cp -R /root/.darkpaycoin/chainstate/ /root/.darkpaycoin$MASTERNODE/

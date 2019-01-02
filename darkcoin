@@ -149,9 +149,7 @@ PS3='Welcome back, what would you like to do?: '
 options=("Nieuwse server aanmaken" "Nieuwe Masternode Uitrollen" "Reinstall masternode" "Delete masternode" "Masternodes starten" "Masternodes updaten" "Turn SWAP on" "Turn SWAP off" "Statuscheck masternode" )
 select opt in "${options[@]}"
 do
-IFACE=ip addr show | awk '/inet.*brd/{print $NF}'
-echo "$IFACE"
- 
+
 V61=2
 GATE=1
 	case $opt in
@@ -164,7 +162,7 @@ GATE=1
 				read MNGENKEY
 			echo "How many masternodes will be on this server?"
 				read AMMAS
-			IFACE=ip addr show | awk '/inet.*brd/{print $NF}'
+			IFACE=$(ip -o link show | sed -rn '/^[0-9]+: en/{s/.: ([^:]*):.*/\1/p}')
 			wget https://raw.githubusercontent.com/DarkPayCoin/releases/master/dpc_mn_install.sh
 			sed -i "s|read -e COINKEY|COINKEY=$MNGENKEY|g" dpc_mn_install.sh
 			bash dpc_mn_install.sh

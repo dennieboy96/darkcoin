@@ -167,9 +167,13 @@ GATE=1
 			echo "IPv6 netmask"
 				read NETMASK
 			echo "Masternode server genkey"
-				read MNGENKEY
+				read PRIVATEKEY
 			echo "How many masternodes will be on this server?"
 				read AMMAS
+			if [[ ${#PRIVATEKEY} -ne "51" ]]; then
+			echo "The private key is shorter or longer than 51 characters, give a new one, use install masternode."
+			exit
+			else 
 			IFACE=$(ip -o link show | sed -rn '/^[0-9]+: en/{s/.: ([^:]*):.*/\1/p}')
 			wget https://raw.githubusercontent.com/DarkPayCoin/releases/master/dpc_mn_install.sh
 			sed -i "s|read -e COINKEY|COINKEY=$MNGENKEY|g" dpc_mn_install.sh
@@ -199,6 +203,7 @@ GATE=1
 			else
 			rm /usr/local/bin/darkcoin
 			installmasternodescript
+			fi
 			fi
 
 	break

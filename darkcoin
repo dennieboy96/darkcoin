@@ -174,7 +174,7 @@ GATE=1
 			wget https://raw.githubusercontent.com/DarkPayCoin/releases/master/dpc_mn_install.sh
 			sed -i "s|read -e COINKEY|COINKEY=$MNGENKEY|g" dpc_mn_install.sh
 			bash dpc_mn_install.sh
-			sed -i '/iface $IFACE inet6 auto/d' /etc/network/interfaces
+			sed -i "/iface $IFACE inet6 auto/d" /etc/network/interfaces
 			echo -e "\niface $IFACE inet6 static \n \t address $IPVNET$V61 \n \t netmask $NETMASK \n \t gateway $IPVNET$GATE \n \t dns-nameservers 2001:19f0:300:1704::6" >> /etc/network/interfaces
 
 			for (( i = 3; i <= $AMMAS; i++ ))

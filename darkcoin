@@ -54,7 +54,7 @@ EOF
 }
 
 function installmasternodescript {
-			Echo "Install script so you can run it like: darkcoin"
+			echo "Install script so you can run it like: darkcoin"
 			cd /usr/local/bin
     			wget https://github.com/dennieboy96/darkcoin/raw/master/darkcoin
 			chmod +x darkcoin

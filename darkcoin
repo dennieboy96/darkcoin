@@ -154,14 +154,14 @@ esac
 	"")
 
 PS3='Welcome back, what would you like to do?: '
-options=("First config of VPS and masternode" "Roll out new masternode" "Reinstall masternode" "Delete masternode" "Start masternode" "update masternode" "Statuscheck masternode" "Turn SWAP on" "Turn SWAP off"  )
+options=("First config of VPS and masternode" "Roll out new masternode" "Reinstall masternode" "Delete masternode" "Start masternode" "Update masternode" "Statuscheck masternode" "Turn SWAP on" "Turn SWAP off"  )
 select opt in "${options[@]}"
 do
 
 V61=2
 GATE=1
 	case $opt in
-		"Nieuwse server aanmaken")
+		"First config of VPS and masternode")
 			echo "Put in IPv6 address without the last digit. Like this: 2a01:7c8:d000:3cc::"
 				read IPVNET
 			echo "IPv6 netmask"
@@ -205,7 +205,7 @@ GATE=1
 
 exit
 ;;
-		"Nieuwe Masternode Uitrollen")
+		"Roll out new masternode")
 			echo "Masternode number"
 				read MASTERNODE
 			echo "Genkey of masternode"
@@ -214,7 +214,7 @@ exit
 	break
 exit
 ;;
-		"Masternodes starten")
+		"Start masternode")
 			echo "Masternode nummer van"
 				read NMBR1
 			echo "tot"
@@ -235,7 +235,7 @@ exit
 	break
 exit
 ;;
-		"Masternodes updaten")
+		"Update masternode")
 		       echo "Masternode nummer van"
                                 read NMBRUP1
                         echo "tot"

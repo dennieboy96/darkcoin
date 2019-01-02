@@ -53,6 +53,14 @@ EOF
 		 fi
 }
 
+function installmasternodescript{
+			Echo "Install script so you can run it like: darkcoin"
+			cd /usr/local/bin
+    			wget https://github.com/dennieboy96/darkcoin/raw/master/darkcoin
+			chmod +x darkcoin
+			chmod 755 darkcoin
+}
+
 function createmasternode {
 if [[ ${#PRIVATEKEY} -ne "51" ]]; then
 echo "The private key is shorter or longer than 51 characters, give a new one, use install masternode."
@@ -146,7 +154,7 @@ esac
 	"")
 
 PS3='Welcome back, what would you like to do?: '
-options=("Nieuwse server aanmaken" "Nieuwe Masternode Uitrollen" "Reinstall masternode" "Delete masternode" "Masternodes starten" "Masternodes updaten" "Turn SWAP on" "Turn SWAP off" "Statuscheck masternode" )
+options=("First config of VPS and masternode" "Roll out new masternode" "Reinstall masternode" "Delete masternode" "Start masternode" "update masternode" "Statuscheck masternode" "Turn SWAP on" "Turn SWAP off"  )
 select opt in "${options[@]}"
 do
 
@@ -184,14 +192,15 @@ GATE=1
 			rm -rf /root/blocks /root/chainstate 
 			rm /root/dpc_fastsync.zip
 			rm /root/dpc_mn_install.sh
-			Echo "Install script so you can run it like: darkcoin"
-			cd /usr/local/bin
 			echo "$IPVNET" > /root/.IPV6
 			Echo "Install script so you can run it like: darkcoin"
-			cd /usr/local/bin
-    			wget https://github.com/dennieboy96/darkcoin/raw/master/darkcoin
-			chmod +x darkcoin
-			chmod 755 darkcoin
+			if [ ! -f /usr/local/bin/darkcoin ]; then
+			installmasternodescript
+			else
+			rm /usr/local/bin/darkcoin
+			installmasternodescript
+			fi
+
 	break
 
 exit

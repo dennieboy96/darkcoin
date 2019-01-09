@@ -152,7 +152,8 @@ case $1 in
 esac
 ;;
 	"")
-
+			IFACE=ip addr show | awk '/inet.*brd/{print $NF}'
+			echo "$IFACE"
 PS3='Welcome back, what would you like to do?: '
 options=("First config of VPS and masternode" "Roll out new masternode" "Reinstall masternode" "Delete masternode" "Start masternode" "Update masternode" "Statuscheck masternode" "Turn SWAP on" "Turn SWAP off"  )
 select opt in "${options[@]}"
@@ -174,7 +175,7 @@ GATE=1
 			echo "The private key is shorter or longer than 51 characters, give a new one, use install masternode."
 			exit
 			else 
-			IFACE=$(ip -o link show | sed -rn '/^[0-9]+: en/{s/.: ([^:]*):.*/\1/p}')
+			IFACE=ip addr show | awk '/inet.*brd/{print $NF}'
 			wget https://raw.githubusercontent.com/DarkPayCoin/releases/master/dpc_mn_install.sh
 			sed -i "s|read -e COINKEY|COINKEY=$MNGENKEY|g" dpc_mn_install.sh
 			bash dpc_mn_install.sh

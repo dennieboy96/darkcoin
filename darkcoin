@@ -5,7 +5,8 @@ sudo grep -w masternodeprivkey /root/.darkpaycoin$MASTERNODE/darkpaycoin.conf | 
 EOF
 )"
 }
-		
+
+
 function deletemasternode {
 		systemctl stop darkpaycoin$MASTERNODE.service
 		rm -rf /root/.darkpaycoin$MASTERNODE 

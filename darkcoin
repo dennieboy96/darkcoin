@@ -152,7 +152,10 @@ case $1 in
 esac
 ;;
 	"")
-			IFACE=ip addr show | awk '/inet.*brd/{print $NF}'
+			IFACE="$( bash <<EOF
+			ip addr show | awk '/inet.*brd/{print $NF}'
+EOF
+)"
 			echo "$IFACE"
 PS3='Welcome back, what would you like to do?: '
 options=("First config of VPS and masternode" "Roll out new masternode" "Reinstall masternode" "Delete masternode" "Start masternode" "Update masternode" "Statuscheck masternode" "Turn SWAP on" "Turn SWAP off"  )

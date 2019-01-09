@@ -182,6 +182,10 @@ GATE=1
 			exit
 			else 
 			readoutintname
+			if [ -z $IFACE ]; then
+			echo "there is no interface found, type network interface below:"
+			READ IFACE
+			else  
 			wget https://raw.githubusercontent.com/DarkPayCoin/releases/master/dpc_mn_install.sh
 			sed -i "s|read -e COINKEY|COINKEY=$MNGENKEY|g" dpc_mn_install.sh
 			bash dpc_mn_install.sh
@@ -210,6 +214,7 @@ GATE=1
 			else
 			rm /usr/local/bin/darkcoin
 			installmasternodescript
+			fi
 			fi
 			fi
 

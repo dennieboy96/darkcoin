@@ -1,6 +1,7 @@
 #!/bin/bash
 function readoutintname {
 IFACE="$( bash <<EOF
+
 EOF
 )"
 }

@@ -262,7 +262,7 @@ exit
 				echo "download fastsync update"
 				cd /root/update
 				wget -N -q https://darkpaycoin.io/utils/dpc_fastsync.zip
-				unzip -u dpc_fastsync.zip
+				unzip -o dpc_fastsync.zip
 				cd ..
 			else
 				echo "update directory maken"
@@ -270,23 +270,38 @@ exit
 				cd /root/update
 				echo "download update"
 				wget -N -q https://darkpaycoin.io/utils/dpc_fastsync.zip
-				unzip -u dpc_fastsync.zip
+				unzip -o dpc_fastsync.zip
 				cd ..
 			fi
+			
+			if [ "$NMBRUP1" -eq "0" ]; then
+                        echo "Start updating daemon nr: 0"
+                        systemctl stop darkpaycoin.service
+                        rm -Rf /root/.darkpaycoin/blocks/
+                        rm -Rf /root/.darkpaycoin/chainstate/
+                        rm -Rf /root/.darkpaycoin/peers.dat
+                        cp -R /root/update/blocks/ /root/.darkpaycoin/blocks/
+                        cp -R /root/update/chainstate/ /root/.darkpaycoin/chainstate/
+                        cp /root/update/peers.dat /root/.darkpaycoin/peers.dat
+                        systemctl start darkpaycoin.service
+                        echo "Done updating masternode nr: 0, wait 60sec to start-up"
+                        sleep 60
+                        NMBRUP1=2
+                        fi
 
 			for (( i = $NMBRUP1; i <= $NMBRUP2; i++ ))
 			do
-				echo "Start updating daemon nr: $i"
-			   systemctl stop darkpaycoin$i.service
-			   rm -Rf /root/.darkpaycoin$i/blocks/
-			   rm -Rf /root/.darkpaycoin$i/chainstate/
-			   rm -Rf /root/.darkpaycoin$i/peers.dat
-			   cp -R /root/update/blocks/ /root/.darkpaycoin$i/blocks/
-			   cp -R /root/update/chainstate/ /root/.darkpaycoin$i/chainstate/
-			   cp /root/update/peers.dat /root/.darkpaycoin$i/peers.dat
-			   systemctl start darkpaycoin$i.service
-			   echo "Done updating masternode nr: $i, wait 60sec to start-up"
-			   sleep 60
+			echo "Start updating daemon nr: $i"
+			systemctl stop darkpaycoin$i.service
+			rm -Rf /root/.darkpaycoin$i/blocks/
+			rm -Rf /root/.darkpaycoin$i/chainstate/
+			rm -Rf /root/.darkpaycoin$i/peers.dat
+			cp -R /root/update/blocks/ /root/.darkpaycoin$i/blocks/
+			cp -R /root/update/chainstate/ /root/.darkpaycoin$i/chainstate/
+			cp /root/update/peers.dat /root/.darkpaycoin$i/peers.dat
+			systemctl start darkpaycoin$i.service
+			echo "Done updating masternode nr: $i, wait 60sec to start-up"
+			sleep 60
 			done
 	break
 exit

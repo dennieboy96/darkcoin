@@ -261,7 +261,7 @@ exit
 			if [ -d "/root/update" ]; then
 				echo "download fastsync update"
 				cd /root/update
-				wget -N -q https://darkpaycoin.io/utils/dpc_fastsync.zip
+				wget -N https://darkpaycoin.io/utils/dpc_fastsync.zip
 				unzip -o dpc_fastsync.zip
 				cd ..
 			else
